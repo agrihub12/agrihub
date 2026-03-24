@@ -1,87 +1,49 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import { Heart, ShoppingCart, Star, MapPin } from 'lucide-react';
-import { motion } from 'framer-motion';
-
-export interface Product {
-  id: string;
-  name: string;
-  price: number;
-  unit: string;
-  image: string;
-  rating: number;
-  location: string;
-  farmer: string;
-  category: string;
-  isTopItem?: boolean;
-}
+import Image from "next/image";
+import Link from "next/link";
+import { MapPin } from "lucide-react";
+import { formatNaira } from "@/lib/format";
+import { Button } from "@/shared/components/Button";
+import type { Listing } from "@/shared/types";
 
 interface ProductCardProps {
-  product: Product;
+  listing: Listing;
 }
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ listing }: ProductCardProps) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -5 }}
-      className="bg-surface group relative overflow-hidden rounded-lg shadow-card transition-all hover:shadow-elevated"
-    >
-      {/* Top Badge */}
-      {product.isTopItem && (
-        <div className="absolute top-3 left-3 z-[2] rounded-full bg-accent px-3 py-1 text-[10px] font-bold text-accent-foreground uppercase tracking-widest">
-          Top Item
-        </div>
-      )}
-
-      {/* Favorite Button */}
-      <button className="absolute top-3 right-3 z-[2] rounded-full bg-white/80 p-1.5 text-muted transition-colors hover:bg-white hover:text-red-500 backdrop-blur-sm">
-        <Heart className="h-4 w-4" />
-      </button>
-
-      {/* Image Container */}
-      <div className="relative aspect-square overflow-hidden bg-background">
-        <Image
-          src={product.image}
-          alt={product.name}
-          fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          className="object-cover transition-transform duration-500 group-hover:scale-110"
-        />
+    <article className="flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <div className="relative h-44 w-full bg-slate-100 sm:h-48">
+        {listing.imageUrl ? (
+          <Image
+            src={listing.imageUrl}
+            alt={listing.productName}
+            fill
+            className="object-cover"
+          />
+        ) : null}
       </div>
 
-      {/* Content */}
-      <div className="p-4">
-        <div className="mb-1 flex items-center gap-1 text-[10px] font-medium text-muted uppercase tracking-wider">
-          <MapPin className="h-3 w-3" />
-          {product.location}
-        </div>
-        
-        <h3 className="mb-2 line-clamp-1 text-sm font-semibold text-foreground group-hover:text-primary">
-          {product.name}
+      <div className="flex flex-1 flex-col gap-2 p-4">
+        <h3 className="line-clamp-2 text-base font-semibold text-slate-900">
+          {listing.productName}
         </h3>
-
-        <div className="mb-3 flex items-center justify-between">
-          <div className="flex items-center gap-1 font-bold text-primary">
-            <span className="text-xs">₦</span>
-            <span className="text-lg">{product.price.toLocaleString()}</span>
-            <span className="text-[10px] font-normal text-muted">/{product.unit}</span>
-          </div>
-          
-          <div className="flex items-center gap-0.5 rounded-full bg-accent/10 px-2 py-0.5 text-xs font-semibold text-accent">
-            <Star className="h-3 w-3 fill-accent" />
-            {product.rating}
-          </div>
-        </div>
-
-        {/* Action Button */}
-        <button className="group/btn flex w-full items-center justify-center gap-2 rounded-lg border-2 border-primary/10 py-2.5 text-xs font-bold text-primary transition-all hover:bg-primary hover:text-white">
-          <ShoppingCart className="h-3.5 w-3.5" />
-          Add to Cart
-        </button>
+        <p className="text-xs font-medium uppercase text-slate-500">{listing.category}</p>
+        <p className="flex items-center gap-1 text-sm text-slate-600">
+          <MapPin className="h-4 w-4" />
+          {listing.farmerLocation || "Nigeria"} • {listing.farmerName}
+        </p>
+        <p className="text-sm text-slate-600">
+          {listing.quantity} {listing.unit} available
+        </p>
+        <p className="text-lg font-bold text-green-700">
+          {formatNaira(listing.priceInKobo)} / {listing.unit}
+        </p>
+        <Link href={`/product/${listing.id}`} className="mt-auto">
+          <Button className="w-full">Buy Now</Button>
+        </Link>
       </div>
-    </motion.div>
+    </article>
   );
 }

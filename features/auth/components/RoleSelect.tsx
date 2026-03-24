@@ -9,14 +9,14 @@ type RoleSelectProps = {
 
 export const RoleSelect = ({ value, onChange }: RoleSelectProps) => {
   return (
-    <div className="grid grid-cols-2 gap-2 rounded-xl bg-slate-100 p-1">
+    <div className="grid grid-cols-2 gap-1 rounded-xl bg-border/30 p-1 border border-border/50">
       <button
         type="button"
         onClick={() => onChange("farmer")}
-        className={`rounded-lg px-3 py-2 text-sm font-medium transition ${
+        className={`rounded-lg px-4 py-2.5 text-sm font-bold transition-all ${
           value === "farmer"
-            ? "bg-green-600 text-white"
-            : "bg-transparent text-slate-700"
+            ? "bg-white text-primary shadow-sm"
+            : "text-muted hover:text-foreground hover:bg-white/50"
         }`}
       >
         Farmer
@@ -24,10 +24,10 @@ export const RoleSelect = ({ value, onChange }: RoleSelectProps) => {
       <button
         type="button"
         onClick={() => onChange("buyer")}
-        className={`rounded-lg px-3 py-2 text-sm font-medium transition ${
+        className={`rounded-lg px-4 py-2.5 text-sm font-bold transition-all ${
           value === "buyer"
-            ? "bg-green-600 text-white"
-            : "bg-transparent text-slate-700"
+            ? "bg-white text-primary shadow-sm"
+            : "text-muted hover:text-foreground hover:bg-white/50"
         }`}
       >
         Buyer

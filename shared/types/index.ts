@@ -14,10 +14,16 @@ export type User = {
 export type Listing = {
   id: string;
   farmerId: string;
-  title: string;
-  price: number;
+  farmerName: string;
+  farmerLocation?: string;
+  productName: string;
+  category: string;
+  description: string;
+  imageUrl?: string;
+  priceInKobo: number;
   quantity: number;
   unit: string;
+  status: "active" | "sold" | "inactive" | "pending" | "paid";
   createdAt: string;
   updatedAt: string;
 };

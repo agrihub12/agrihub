@@ -10,6 +10,7 @@ import {
 } from "react";
 import { onAuthStateChanged, type User as FirebaseUser } from "firebase/auth";
 import { auth } from "@/lib/firebase";
+import { logger } from "@/lib/logger";
 
 type AuthContextValue = {
   user: FirebaseUser | null;
@@ -27,15 +28,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (!auth) {
+      logger.warn("auth/useAuth", "Auth listener skipped because Firebase auth is unavailable");
       return;
     }
 
+    logger.info("auth/useAuth", "Subscribing to auth state changes");
     const unsubscribe = onAuthStateChanged(auth, (nextUser) => {
+      logger.debug("auth/useAuth", "Auth state changed", { uid: nextUser?.uid ?? null });
       setUser(nextUser);
       setLoading(false);
     });
 
-    return unsubscribe;
+    return () => {
+      logger.info("auth/useAuth", "Unsubscribing from auth state changes");
+      unsubscribe();
+    };
   }, []);
 
   const value = useMemo(() => ({ user, loading }), [user, loading]);

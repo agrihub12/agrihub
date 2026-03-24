@@ -1,8 +1,18 @@
 'use client';
 
+import Link from 'next/link';
 import { Search, ShoppingCart, Heart, ClipboardList, User, Sprout } from 'lucide-react';
+import { signOut } from '@/features/auth/api/firebaseAuthHelpers';
+import { useAuth } from '@/features/auth/hooks/useAuth';
 
 export function Navbar() {
+  const { user, loading } = useAuth();
+  const displayName = user?.displayName ?? user?.email ?? 'Account';
+
+  const handleLogout = async () => {
+    await signOut();
+  };
+
   return (
     <header className="sticky top-0 z-[50] w-full border-b border-border bg-surface/80 backdrop-blur-md">
       <div className="mx-auto flex h-20 max-w-[1440px] items-center justify-between px-6 lg:px-10">
@@ -34,10 +44,56 @@ export function Navbar() {
           <NavAction icon={<ShoppingCart className="h-5 w-5" />} label="Cart" count={12} />
           
           <div className="h-8 w-[2px] rounded-full bg-border" />
-          
-          <button className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-primary/10 transition-transform hover:scale-110">
-            <User className="h-5 w-5 text-primary" />
-          </button>
+
+          {loading ? (
+            <div className="hidden h-10 w-28 animate-pulse rounded-full bg-slate-200 sm:block" />
+          ) : user ? (
+            <>
+              <div className="hidden items-center gap-2 sm:flex">
+                <span className="max-w-32 truncate text-xs font-semibold text-primary">
+                  {displayName}
+                </span>
+                <button
+                  onClick={handleLogout}
+                  className="rounded-full border border-primary/20 px-4 py-2 text-xs font-bold text-primary transition hover:bg-primary/10"
+                >
+                  Logout
+                </button>
+              </div>
+              <Link
+                href="/marketplace"
+                className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-primary/10 transition-transform hover:scale-110 sm:hidden"
+                aria-label="Account"
+              >
+                <User className="h-5 w-5 text-primary" />
+              </Link>
+            </>
+          ) : (
+            <>
+              <div className="hidden items-center gap-2 sm:flex">
+                <Link
+                  href="/login"
+                  className="rounded-full border border-primary/20 px-4 py-2 text-xs font-bold text-primary transition hover:bg-primary/10"
+                >
+                  Login
+                </Link>
+                <Link
+                  href="/signup"
+                  className="rounded-full bg-primary px-4 py-2 text-xs font-bold text-white transition hover:bg-primary/90"
+                >
+                  Sign Up
+                </Link>
+              </div>
+
+              <Link
+                href="/login"
+                className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-primary/10 transition-transform hover:scale-110 sm:hidden"
+                aria-label="Login"
+              >
+                <User className="h-5 w-5 text-primary" />
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </header>
