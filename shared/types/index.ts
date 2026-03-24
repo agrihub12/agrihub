@@ -8,6 +8,18 @@ export type User = {
   location?: string;
   phoneNumber?: string;
   address?: string;
+  paymentDetails?: {
+    preferredMethod?: "card" | "transfer" | "ussd" | "wallet";
+    accountName?: string;
+    accountNumber?: string;
+    bankName?: string;
+  };
+  notificationSettings?: {
+    orderUpdates: boolean;
+    paymentAlerts: boolean;
+    marketing: boolean;
+    smsAlerts: boolean;
+  };
   photoURL?: string | null;
   createdAt: string;
   updatedAt: string;

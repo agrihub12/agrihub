@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Sprout, LayoutDashboard, LayoutList, ClipboardList, Settings, LogOut, Menu, X, Tractor } from "lucide-react";
+import { Sprout, LayoutDashboard, LayoutList, ClipboardList, Settings, LogOut, Menu, X, Tractor, Wallet } from "lucide-react";
 
 export default function FarmerLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -13,6 +13,7 @@ export default function FarmerLayout({ children }: { children: React.ReactNode }
     { name: "Overview", href: "/farmer/dashboard", icon: LayoutDashboard },
     { name: "My Listings", href: "/farmer/listings", icon: LayoutList },
     { name: "Orders", href: "/farmer/orders", icon: ClipboardList },
+    { name: "Loans", href: "/farmer/loans", icon: Wallet },
     { name: "Settings", href: "/farmer/settings", icon: Settings },
   ];
 
